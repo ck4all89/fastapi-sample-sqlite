@@ -17,7 +17,7 @@ celerybeat.pid
 *.env
 *.DS_Store
 pip
-*.json
+# *.json
 media
 static/assets/pdf/*
 venv/
