@@ -50,7 +50,7 @@ async def GetUser(user: Users = Depends(GetCurrentUser)):
 @router.post("/change-password")
 async def ChangePassword(session: SessionDep, data: PasswordChangeRequest, user: Users = Depends(GetCurrentUser)):
     await ChangePasswordService(session, user, data)
-    return JSONResponse(content={"msg": "Password changed successfully."})
+    return JSONResponse(content={"msg": "Password has been changed."})
 
 
 @router.get("/admin")

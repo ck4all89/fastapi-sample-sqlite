@@ -26,6 +26,9 @@ async def AuthenticateUserService(session: AsyncSession, email: str, password: s
     stmt = select(Users).where(Users.email == email)
     result = await session.scalars(stmt)
     user_obj = result.first()
+
+    if not user_obj.is_active:
+        raise HTTPException(status_code=401, detail="User is not active.")
     
     if not user_obj or not VerifyPassword(password, user_obj.hashed_password):
         return None
@@ -53,7 +56,7 @@ async def RefreshTokenService(session: AsyncSession, token: str):
     result = await session.scalars(select(Users).where(Users.token == token))
     user_obj = result.first()
 
-    if user_obj and not user_obj.revoked:
+    if user_obj and user_obj.is_active:
         expires_at = user_obj.expires_at
         
         if expires_at.tzinfo is None:
@@ -77,5 +80,4 @@ async def RevokeRefreshTokenService(session: AsyncSession, token: str):
     result = await session.scalars(select(Users).where(Users.token == token))
     db_token = result.first()
     if db_token:
-        db_token.revoked = True
         await session.commit()

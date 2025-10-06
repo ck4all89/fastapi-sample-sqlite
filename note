@@ -1,0 +1,1 @@
+pip install "fastapi[standard]" "sqlalchemy[asyncio]" aiosqlite alembic python-decouple python-jose[cryptography] passlib[bcrypt] cryptography
